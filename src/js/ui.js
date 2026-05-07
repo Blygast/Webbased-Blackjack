@@ -24,9 +24,11 @@ export const showGameView = () => switchView(gameView, authView);
 
 const PULSE_CLASSES = ["pot-animating-up", "pot-animating-down"];
 let potAnimInterval = null;
+let potAnimTimeout = null;
 
 const animatePotValue = (target) => {
   if (potAnimInterval) clearInterval(potAnimInterval);
+  if (potAnimTimeout) clearTimeout(potAnimTimeout);
   const current = parseInt(currentPotEl.textContent) || 0;
   const diff = target - current;
   if (diff === 0) { currentPotEl.textContent = target; return; }
@@ -60,7 +62,7 @@ const animatePotValue = (target) => {
       currentPotEl.textContent = target;
       signEl.classList.remove("pot-sign-visible");
       currentPotEl.classList.remove("pot-value-shifted");
-      setTimeout(() => { currentPotEl.classList.remove(...PULSE_CLASSES); signEl.dataset.direction = ""; }, 300);
+          potAnimTimeout = setTimeout(() => { currentPotEl.classList.remove(...PULSE_CLASSES); signEl.dataset.direction = ""; potAnimTimeout = null; }, 300);
     }
   }, 1200 / steps);
 };
@@ -317,7 +319,8 @@ export const renderControls = (phase) => {
   document.querySelector(".controls-result").classList.toggle("hidden", phase !== "roundOver");
 
   $("start-round-btn").disabled = betSize <= 0;
-  $("play-again-btn").disabled = betSize <= 0 || user.pot < betSize;
+  const effectiveBet = betSize > 0 ? betSize : getGameState().lastBet;
+  $("play-again-btn").disabled = effectiveBet <= 0 || user.pot < effectiveBet;
   $("top-up-btn").disabled = isRoundActive;
   $("reset-bet-btn").disabled = isRoundActive;
 
@@ -409,6 +412,19 @@ const BET_CHIP_STATES = {
 };
 
 export const clearBetChips = () => { betChipHistory = []; betChipsEl.innerHTML = null; setBetChipsClass(...BET_CHIP_STATES.idle); };
+
+export const rebetChips = (amount) => {
+  betChipHistory = [];
+  const denominations = [1000, 500, 100, 50, 10];
+  let remaining = amount;
+  for (const d of denominations) {
+    while (remaining >= d) {
+      betChipHistory.push(d);
+      remaining -= d;
+    }
+  }
+  renderBetChips();
+};
 export const moveBetChipsToDealer = () => setBetChipsClass(...BET_CHIP_STATES.dealer);
 export const moveBetChipsToPlayer = () => setBetChipsClass(...BET_CHIP_STATES.player);
 export const moveBetChipsToPlaying = () => setBetChipsClass(...BET_CHIP_STATES.playing);

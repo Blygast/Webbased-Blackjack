@@ -10,6 +10,7 @@ import {
   renderChips,
   renderControls,
   clearBetChips,
+  rebetChips,
   moveBetChipsToDealer,
   moveBetChipsToPlayer,
   moveBetChipsToPlaying,
@@ -90,12 +91,13 @@ const handleStartRound = () => {
   if (bet <= 0) return;
 
   const user = getLoggedInUser();
-  if (bet > user.pot) {
-    setMessage("Not enough funds.");
-    return;
-  }
 
   if (getBetSize() <= 0) {
+    if (bet > user.pot) {
+      setMessage("Not enough funds.");
+      return;
+    }
+    rebetChips(bet);
     const updated = updateUserPot(user.id, user.pot - bet);
     renderUserInfo(updated);
   }

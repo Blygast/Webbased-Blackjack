@@ -6,6 +6,38 @@ A web-based Blackjack game built with vanilla JavaScript, HTML, and CSS.
 
 ---
 
+## Screenshots
+
+### Authentication
+
+| Login | Create Account |
+|:---:|:---:|
+| ![Login Screen](screenshots/main-login-screen.png) | ![Create Account Screen](screenshots/create-account-screen.png) |
+
+### Gameplay
+
+| Game Table | During a Match |
+|:---:|:---:|
+| ![Game Screen](screenshots/main-game-screen.png) | ![Active Match](screenshots/main-game-match.png) |
+
+### Betting
+
+| Placing Chips | Blackjack |
+|:---:|:---:|
+| ![Betting Chips](screenshots/game-betting-chips.png) | ![Blackjack](screenshots/game-blackjack.png) |
+
+### Results
+
+| Win | Loss | Tie (Push) |
+|:---:|:---:|:---:|
+| ![Win](screenshots/game-win.png) | ![Loss](screenshots/game-loss.png) | ![Tie](screenshots/game-tie.png) |
+
+| Dealer Bust (Win) | Player Bust (Loss) |
+|:---:|:---:|
+| ![Dealer Bust Win](screenshots/game-bust-win.png) | ![Player Bust Loss](screenshots/game-bust-loss.png) |
+
+---
+
 ## About
 
 Webbased Blackjack is a single-page application where users register an account, log in, and play Blackjack against a computer-controlled dealer. All user data is stored locally in the browser using `localStorage` in JSON format — no backend required.
@@ -37,9 +69,9 @@ Webbased Blackjack is a single-page application where users register an account,
 - Place bets using clickable **chip buttons** (10, 50, 100, 500, 1000)
 - Pot **decreases in real time** as chips are placed
 - Pot **increases** when chips are removed or bet is reset
-- Bet is deducted from pot when placed; winnings/losses are settled against remaining pot
+- Bet is deducted from pot when chips are placed; winnings/losses are settled against remaining pot
 - Chips can be added before dealing and removed by clicking them or pressing reset
-- **Play Again** re-uses your previous bet amount (auto-deducted from pot)
+- **Play Again** — one-click rebet using your previous bet amount, chips are automatically rendered for the new round (only if funds are sufficient)
 - **Top Up** button to add 1000 credits when funds run out
 - **Zero-funds gate** — a modal blocks the table when your pot reaches 0, prompting you to top up before continuing
 - Pot is clamped to a minimum of 0 — it can never go negative
@@ -51,7 +83,7 @@ Webbased Blackjack is a single-page application where users register an account,
 - Contextual action buttons that update based on game phase
 - Animated card dealing, chip flying, and celebration effects (confetti, fireworks, coin rain) on wins
 - Result toasts with distinct styling for wins, losses, blackjacks, and pushes
-- Pot value animation with gain/loss indicators
+- Pot value animation with gain/loss indicators (+ / − sign)
 - Particle canvas properly resizes with the browser window
 
 ---
@@ -107,6 +139,7 @@ src/
     chips/        # Chip images (SVG)
     backgrounds/  # Table and background images
 index.html       # Single-page HTML entry point
+screenshots/     # Game screenshots for README
 ```
 
 ---
@@ -139,7 +172,7 @@ All data is saved in `localStorage` under the key `blackjack_db` as a JSON objec
 4. **Play** — hit, stand, or double down
 5. **Dealer plays** — dealer reveals hidden card and hits until 17+
 6. **Settle** — pot is updated based on the result
-7. **Play Again** — repeat with the same bet (auto-deducted from pot) or start a new round
+7. **Play Again** — instantly rebet the same amount with rendered chips, or start a new round to change your bet
 
 ### Pot Logic
 
