@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/styles/style.css" />
+    <title>Blackjack</title>
+  </head>
+  <body>
+    <canvas id="particles-canvas"></canvas>
+
+    <div id="game-notifications" aria-live="polite"></div>
+
+    <div class="floating-suits" aria-hidden="true">
+      <span class="suit" style="left:5%;animation-duration:18s;animation-delay:0s;font-size:1.5rem">&#9824;</span>
+      <span class="suit" style="left:14%;animation-duration:22s;animation-delay:3s;font-size:2.5rem">&#9829;</span>
+      <span class="suit" style="left:27%;animation-duration:16s;animation-delay:1s;font-size:1.8rem">&#9830;</span>
+      <span class="suit" style="left:40%;animation-duration:24s;animation-delay:5s;font-size:2rem">&#9827;</span>
+      <span class="suit" style="left:55%;animation-duration:19s;animation-delay:2s;font-size:1.6rem">&#9824;</span>
+      <span class="suit" style="left:67%;animation-duration:21s;animation-delay:7s;font-size:2.2rem">&#9829;</span>
+      <span class="suit" style="left:79%;animation-duration:17s;animation-delay:4s;font-size:1.8rem">&#9830;</span>
+      <span class="suit" style="left:91%;animation-duration:23s;animation-delay:6s;font-size:2rem">&#9827;</span>
+    </div>
+
+    <div id="celebration-container" aria-hidden="true"></div>
+    <div id="result-overlay" aria-hidden="true"></div>
+
+    <main class="app">
+      <section id="auth-view" class="view">
+        <div class="auth-brand">
+          <svg class="auth-logo" viewBox="-15 -5 130 125">
+            <rect x="3" y="15" width="55" height="80" rx="6" fill="rgba(255,255,255,0.06)" stroke="rgba(255,215,0,0.35)" stroke-width="1.5" transform="rotate(-12, 30, 55)" />
+            <rect x="30" y="8" width="55" height="80" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,215,0,0.45)" stroke-width="1.5" transform="rotate(5, 57, 48)" />
+            <text x="52" y="56" text-anchor="middle" font-size="28" fill="#FFD700" font-family="serif" transform="rotate(5, 57, 48)">A</text>
+            <text x="52" y="76" text-anchor="middle" font-size="16" fill="#FFD700" font-family="serif" transform="rotate(5, 57, 48)">&#9824;</text>
+          </svg>
+          <h1 class="shimmer-text">BLACKJACK</h1>
+        </div>
+
+        <div id="login-panel" class="auth-panel glass-panel">
+          <h2>Welcome Back</h2>
+          <form id="login-form">
+            <div class="input-group">
+              <input name="username" type="text" id="login-username" class="input input-glass" placeholder="Username" required />
+            </div>
+            <div class="input-group">
+              <input name="password" type="password" id="login-password" class="input input-glass" placeholder="Password" required />
+            </div>
+            <p id="auth-message" class="auth-message"></p>
+            <button type="submit" class="btn btn-gold">Login</button>
+          </form>
+          <div class="auth-switch">
+            <span>Don't have an account?</span>
+            <button id="show-register-btn" type="button" class="btn-link">Create account</button>
+          </div>
+        </div>
+
+        <div id="register-panel" class="auth-panel glass-panel hidden">
+          <h2>Create Account</h2>
+          <form id="register-form">
+            <div class="input-group">
+              <input name="username" type="text" id="register-username" class="input input-glass" placeholder="Choose a username" required />
+            </div>
+            <div class="input-group">
+              <input name="password" type="password" id="register-password" class="input input-glass" placeholder="Create a password" required />
+            </div>
+            <p id="auth-message-register" class="auth-message"></p>
+            <button type="submit" class="btn btn-gold">Register</button>
+          </form>
+          <div class="auth-switch">
+            <span>Already have an account?</span>
+            <button id="show-login-btn" type="button" class="btn-link">Back to login</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="game-view" class="view hidden">
+        <header class="game-header glass-bar bar-anim-neon">
+          <div class="header-left">
+            <div class="user-info">
+              <span class="user-label">Player</span>
+              <span id="current-user" class="user-name"></span>
+            </div>
+          </div>
+          <h1 class="header-title shimmer-text-sm">BLACKJACK</h1>
+          <button id="logout-btn" class="btn btn-outline">Logout</button>
+        </header>
+
+        <div class="game-content">
+          <section class="table">
+            <div class="dealer-area">
+              <div class="card-zone">
+                <div id="dealer-cards" class="cards"></div>
+                <div class="card-box"></div>
+              </div>
+              <div class="area-header">
+                <h2 class="area-label dealer-label">Dealer</h2>
+                <p id="dealer-score" class="score"></p>
+              </div>
+            </div>
+
+            <div id="chip-container" class="chip-zone"></div>
+
+            <div class="player-area">
+              <div class="area-header">
+                <h2 class="area-label player-label">Player</h2>
+                <p id="player-score" class="score"></p>
+              </div>
+              <div class="card-zone">
+                <div id="player-cards" class="cards"></div>
+                <div class="card-box"></div>
+              </div>
+            </div>
+
+            <div id="bet-chips" class="bet-chips-area bet-chips-idle" aria-hidden="true"></div>
+          </section>
+        </div>
+
+          <div id="zero-funds-overlay" class="hidden" aria-hidden="true">
+            <div class="zero-funds-content glass-panel">
+              <div class="zero-funds-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12V7H5a2 2 0 010-4h14v4"/>
+                  <path d="M3 5v14a2 2 0 002 2h16v-5"/>
+                  <path d="M18 12a2 2 0 000 4h4v-4h-4z"/>
+                </svg>
+              </div>
+              <h2 class="zero-funds-title">You're out of funds!</h2>
+              <p class="zero-funds-text">Top up your pot to keep playing.</p>
+              <button id="overlay-top-up-btn" class="btn btn-gold">Top Up 1000 kr</button>
+            </div>
+          </div>
+
+        <footer class="game-footer glass-bar bar-anim-neon">
+          <div class="footer-pot">
+            <div class="footer-value">
+              <span class="footer-label">Pot</span>
+              <span class="footer-amount pot-amount"><span id="current-pot"></span> kr</span>
+            </div>
+            <button id="top-up-btn" class="btn btn-sm btn-subtle">Top Up</button>
+          </div>
+
+          <div class="controls">
+            <div class="controls-group controls-bet">
+              <button id="start-round-btn" class="btn btn-gold">Deal</button>
+            </div>
+            <div class="controls-group controls-play hidden">
+              <button id="hit-btn" class="btn btn-emerald">Hit</button>
+              <button id="stand-btn" class="btn btn-gold">Stand</button>
+              <button id="double-btn" class="btn btn-purple">Double</button>
+            </div>
+            <div class="controls-group controls-result hidden">
+              <button id="play-again-btn" class="btn btn-gold">Play Again</button>
+              <button id="new-round-btn" class="btn btn-outline">New Round</button>
+            </div>
+          </div>
+
+          <div class="footer-bet">
+            <button id="reset-bet-btn" class="btn btn-sm btn-subtle">Reset</button>
+            <div class="footer-value">
+              <span class="footer-label">Bet</span>
+              <span class="footer-amount bet-amount"><span id="active-bet-display">0</span> kr</span>
+            </div>
+          </div>
+        </footer>
+      </section>
+    </main>
+
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>
