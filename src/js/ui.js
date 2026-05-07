@@ -31,7 +31,13 @@ const animatePotValue = (target) => {
   if (potAnimTimeout) clearTimeout(potAnimTimeout);
   const current = parseInt(currentPotEl.textContent) || 0;
   const diff = target - current;
-  if (diff === 0) { currentPotEl.textContent = target; return; }
+  if (diff === 0) {
+    currentPotEl.textContent = target;
+    currentPotEl.classList.remove(...PULSE_CLASSES, "pot-value-shifted");
+    const s = currentPotEl.parentElement.querySelector(".pot-sign");
+    if (s) { s.classList.remove("pot-sign-visible"); s.dataset.direction = ""; }
+    return;
+  }
 
   const isGain = diff > 0;
   const steps = Math.min(Math.abs(diff), 40);

@@ -26,13 +26,17 @@ A web-based Blackjack game built with vanilla JavaScript, HTML, and CSS.
 
 ### Results
 
-| Blackjack | Win | Loss |
+| Blackjack Win | Blackjack Loss | Win |
 |:---:|:---:|:---:|
-| ![Blackjack](screenshots/game-blackjack.png) | ![Win](screenshots/game-win.png) | ![Loss](screenshots/game-loss.png) |
+| ![Blackjack Win](screenshots/game-blackjack-win.png) | ![Blackjack Loss](screenshots/game-blackjack-loss.png) | ![Win](screenshots/game-win.png) |
 
-| Tie (Push) | Dealer Bust (Win) | Player Bust (Loss) |
+| Loss | Tie (Push) | Dealer Bust (Win) |
 |:---:|:---:|:---:|
-| ![Tie](screenshots/game-tie.png) | ![Dealer Bust Win](screenshots/game-bust-win.png) | ![Player Bust Loss](screenshots/game-bust-loss.png) |
+| ![Loss](screenshots/game-loss.png) | ![Tie](screenshots/game-tie.png) | ![Dealer Bust Win](screenshots/game-bust-win.png) |
+
+| Player Bust (Loss) |
+|:---:|
+| ![Player Bust Loss](screenshots/game-bust-loss.png) |
 
 ---
 
